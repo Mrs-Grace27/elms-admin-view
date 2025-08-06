@@ -1,9 +1,9 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ToastContainer } from 'react-toastify';
 import { AuthProvider } from "@/contexts/AuthContext";
+import 'react-toastify/dist/ReactToastify.css';
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Login from "./pages/Login";
 import AdminLayout from "@/components/layouts/AdminLayout";
@@ -18,8 +18,18 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <AuthProvider>
-        <Toaster />
-        <Sonner />
+        <ToastContainer 
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<Login />} />

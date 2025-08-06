@@ -1,7 +1,7 @@
 // Authentication Context
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { authService, LoginCredentials, LoginResponse, User } from '@/services/auth.service';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'react-toastify';
 
 interface AuthContextType {
   user: User | null;
@@ -32,7 +32,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const { toast } = useToast();
 
   const login = async (credentials: LoginCredentials): Promise<LoginResponse> => {
     try {
@@ -45,18 +44,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUserRole(authService.getCurrentUserRole());
       setIsAuthenticated(true);
 
-      toast({
-        title: "Welcome back!",
-        description: `Successfully logged in as ${userData.first_name} ${userData.last_name}`,
-      });
+      toast.success(`Welcome back, ${userData.first_name} ${userData.last_name}!`);
 
       return response;
     } catch (error: any) {
-      toast({
-        title: "Login failed",
-        description: error.message || "Invalid credentials. Please try again.",
-        variant: "destructive",
-      });
+      toast.error(error.message || "Invalid credentials. Please try again.");
       throw error;
     } finally {
       setIsLoading(false);
@@ -72,10 +64,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(null);
       setUserRole(null);
       setIsAuthenticated(false);
-      toast({
-        title: "Logged out",
-        description: "You have been successfully logged out.",
-      });
+      toast.success("You have been successfully logged out.");
     }
   };
 
